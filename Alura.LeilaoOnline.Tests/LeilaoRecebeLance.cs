@@ -33,5 +33,24 @@ namespace Alura.LeilaoOnline.Tests
             var valorObtido = leilao.Lances.Count();
             Assert.Equal(qtdEsperada, valorObtido);
         }
+
+        [Fact]
+        public void NãoAceitaproximoLanceDadoMesmoClienteRealizouUltimoLance()
+        {
+            // Arrange - cenário
+            var leilao = new Leilao("Van Gogh");
+            var fulano = new Interessada("Fulano", leilao);
+            leilao.IniciaPregao();
+            leilao.RecebeLance(fulano, 800);
+
+            // Act - método sob teste
+            leilao.RecebeLance(fulano, 1000);
+
+            leilao.TerminaPregao();
+
+            // Assert - verificação com as espectativas
+            var valorObtido = leilao.Lances.Count();
+            Assert.Equal(1, valorObtido);
+        }
     }
 }

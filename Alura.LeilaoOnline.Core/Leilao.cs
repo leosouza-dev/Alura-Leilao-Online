@@ -27,15 +27,18 @@ namespace Alura.LeilaoOnline.Core
             EstadoLeilao = EstadoLeilao.LeilaoAntesDoPregao;
         }
 
+        // checar se as condições para um lance ser aceito
+        private bool NovoEhLanceAceito(Interessada cliente)
+        {
+            return (EstadoLeilao == EstadoLeilao.LeilaoEmAndamento) && (cliente != _ultimoCliente);
+        }
+
         public void RecebeLance(Interessada cliente, double valor)
         {
-            if(EstadoLeilao == EstadoLeilao.LeilaoEmAndamento)
+            if(NovoEhLanceAceito(cliente))
             {
-                if(cliente != _ultimoCliente)
-                {
-                    _lances.Add(new Lance(cliente, valor));
-                    _ultimoCliente = cliente;
-                }
+                _lances.Add(new Lance(cliente, valor));
+                _ultimoCliente = cliente;
             }
         }
 

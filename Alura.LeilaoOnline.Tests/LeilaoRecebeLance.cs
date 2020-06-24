@@ -9,23 +9,29 @@ namespace Alura.LeilaoOnline.Tests
 {
     public class LeilaoRecebeLance
     {
-        [Fact]
-        public void NãoPermiteNovosLancesDadoLeilaoFinalizado()
+        [Theory]
+        [InlineData(2, new double[] { 800, 900 })]
+        [InlineData(3, new double[] { 800, 900, 1100 })]
+        [InlineData(4, new double[] { 800, 900, 1100, 1500 })]
+        public void NãoPermiteNovosLancesDadoLeilaoFinalizado(int qtdEsperada, double[] ofertas)
         {
             // Arrange - cenário
             var leilao = new Leilao("Van Gogh");
             var fulano = new Interessada("Fulano", leilao);
-            leilao.RecebeLance(fulano, 800);
-            leilao.RecebeLance(fulano, 900);
+
+            foreach (var valor in ofertas)
+            {
+                leilao.RecebeLance(fulano, valor);
+            }
+
             leilao.TerminaPregao();
 
             // Act - método sob teste
             leilao.RecebeLance(fulano, 1000);
 
             // Assert - verificação com as espectativas
-            var valorEsperado = 2; // dois lances
             var valorObtido = leilao.Lances.Count();
-            Assert.Equal(valorEsperado, valorObtido);
+            Assert.Equal(qtdEsperada, valorObtido);
         }
     }
 }

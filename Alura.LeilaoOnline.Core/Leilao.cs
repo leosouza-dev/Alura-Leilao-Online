@@ -36,6 +36,7 @@ namespace Alura.LeilaoOnline.Core
         public void IniciaPregao()
         {
             // rodando os testes após essa inclusão - quase todos quebraram
+            // código regrediu
             EstadoLeilao = EstadoLeilao.LeilaoEmAndamento;
         }
 

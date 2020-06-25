@@ -54,7 +54,7 @@ namespace Alura.LeilaoOnline.Core
         {
             if (EstadoLeilao != EstadoLeilao.LeilaoEmAndamento)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException("Não é possivel terminar o pregão sem te-lo inicializado");
             }
 
             Ganhador = Lances

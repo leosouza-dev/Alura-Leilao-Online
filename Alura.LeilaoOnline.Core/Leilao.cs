@@ -20,14 +20,14 @@ namespace Alura.LeilaoOnline.Core
         public string Peca { get; }
         public Lance Ganhador { get; private set; }
         public EstadoLeilao EstadoLeilao { get; private set; }
-        public double ValorDestino { get; }
+        public IModalidadeAvaliacao Avaliador { get; }
 
-        public Leilao(string peca, double valorDestino = 0)
+        public Leilao(string peca, IModalidadeAvaliacao avaliador)
         {
             Peca = peca;
             _lances = new List<Lance>();
             EstadoLeilao = EstadoLeilao.LeilaoAntesDoPregao;
-            ValorDestino = valorDestino;
+            Avaliador = avaliador;
         }
 
         // checar se as condições para um lance ser aceito
@@ -59,23 +59,7 @@ namespace Alura.LeilaoOnline.Core
                 throw new InvalidOperationException("Não é possivel terminar o pregão sem te-lo inicializado");
             }
 
-            if(ValorDestino > 0)
-            {
-                // modalidade oferta superior mais proxima
-                Ganhador = Lances
-                    .Where(l => l.Valor > ValorDestino) // pega os valores maiores que o destino
-                    .DefaultIfEmpty(new Lance(null, 0)) // o valor padrão é um lance sem cliente com valor 0
-                    .OrderBy(l => l.Valor)
-                    .FirstOrDefault();
-            }
-            else
-            {
-                // modalidade maior valor
-                Ganhador = Lances
-                    .DefaultIfEmpty(new Lance(null, 0)) // o valor padrão é um lance sem cliente com valor 0
-                    .OrderBy(l => l.Valor)
-                    .LastOrDefault();
-            }
+            Ganhador = Avaliador.Avalia(this);
 
             EstadoLeilao = EstadoLeilao.LeilaoFinalizado;
         }

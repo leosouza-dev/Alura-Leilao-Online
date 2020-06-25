@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System;
 
 namespace Alura.LeilaoOnline.Core
 {
@@ -51,6 +52,11 @@ namespace Alura.LeilaoOnline.Core
 
         public void TerminaPregao()
         {
+            if (EstadoLeilao != EstadoLeilao.LeilaoEmAndamento)
+            {
+                throw new InvalidOperationException();
+            }
+
             Ganhador = Lances
                 .DefaultIfEmpty(new Lance(null, 0)) // o valor padrão é um lance sem cliente com valor 0
                 .OrderBy(l => l.Valor)

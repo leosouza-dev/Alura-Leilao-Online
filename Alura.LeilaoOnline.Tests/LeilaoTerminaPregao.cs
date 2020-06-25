@@ -74,5 +74,37 @@ namespace Alura.LeilaoOnline.Tests
             var msgEsperada = "Não é possivel terminar o pregão sem te-lo inicializado";
             Assert.Equal(msgEsperada, excecaoObtida.Message);
         }
+
+        [Theory]
+        [InlineData(1200, 1250, new double[] { 800, 1150, 1400, 1250})]
+        public void RetornaMaiorValorAproximado(double valorDestino, double valorEsperado, double[] ofertas)
+        {
+            // Arrange - cenário
+            var leilao = new Leilao("Van Gogh", valorDestino);
+            var fulano = new Interessada("Fulano", leilao);
+            var maria = new Interessada("Maria", leilao);
+            leilao.IniciaPregao();
+
+            for (int i = 0; i < ofertas.Length; i++)
+            {
+                var valor = ofertas[i];
+
+                if (i % 2 == 0)
+                {
+                    leilao.RecebeLance(fulano, valor);
+                }
+                else
+                {
+                    leilao.RecebeLance(maria, valor);
+                }
+            }
+
+            // Act - método sob teste
+            leilao.TerminaPregao();
+
+            // Assert - verificação com as espectativas
+            var valorObtido = leilao.Ganhador.Valor;
+            Assert.Equal(valorEsperado, valorObtido);
+        }
     }
 }

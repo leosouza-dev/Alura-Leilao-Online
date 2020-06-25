@@ -11,8 +11,13 @@ namespace Alura.LeilaoOnline.Tests
         [Fact]
         public void LanceArgumentExceptionDadoValorNegativo()
         {
+            // arrange
+            var valorNegativo = -100;
+
+            // assert
             var ex = Assert.Throws<ArgumentException>(
-                () => new Lance(null, -100)
+                // act
+                () => new Lance(null, valorNegativo)
             );           
         }
     }

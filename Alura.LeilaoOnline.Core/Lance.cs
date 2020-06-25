@@ -11,7 +11,7 @@ namespace Alura.LeilaoOnline.Core
         {
             if(valor < 0)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Valor do Lance não pode ser Negativo!");
             }
 
             Cliente = cliente;
